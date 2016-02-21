@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical|center"
+    android:background="#545454"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical|center"
+        android:background="#FFFFFF"
+        android:layout_height="match_parent">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Zibboo"
+        android:hint="So U ARE ZIBOO"
+        android:layout_marginBottom="30dp"
+        android:textSize="24dp"
+        android:gravity="center_horizontal|center_vertical|center"
+        android:textColor="@color/colorPrimary"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:hint="Enter Name"
+        android:textSize="24dp"
+        android:gravity="center_horizontal|center_vertical|center"
+        android:textColor="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal|center_vertical|bottom"
+        android:text="Are You Sure U Are ZIBOO"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
