@@ -38,10 +38,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     //Database Columns HASHMAP Attendance Details
     public static final String ATTENDANCE_ID_DB = "id";
-    public static final String AADHAAR_Attendance_DB = "UserAadhaar";
-    public static final String DATETIME_DB = "Date_Time";
-    public static final String NAME_ATTENDANCE_DB = "Name_Attendance";
-    public static final String FLAGSYNC_DB = "Flag_Sync";
+    public static final String DATE_DB = "Date";
+    public static final String LATITUDE_DB = "Latitude";
+    public static final String LONGITUDE_DB = "Longitude";
+    public static final String TIME_DB = "Time";
+    public static final String Flag_Sync_DB = "Flag_Sync";
 
 
 
@@ -187,9 +188,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }*/
 
     // // Getting the Complete Database in a List Attendance
-   /* public ArrayList<HashMap<String, String>> GetAllData_AttendanceStatus(){
+    public ArrayList<HashMap<String, String>> GetAllData_AttendanceStatus(){
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_ZIBOLOCATION +" ORDER BY "+ DATETIME_DB +" DESC" ;
+        String selectQuery = "SELECT  * FROM " + TABLE_ZIBOLOCATION +" ORDER BY "+ DATE_DB +" DESC" ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -197,15 +198,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             HashMap<String,String> Attendance_Details = new HashMap<String, String>();
             //Log.d(KEY_ID_DB, cursor.getString(0));
             Attendance_Details.put(ATTENDANCE_ID_DB, cursor.getString(0));
-            Attendance_Details.put(AADHAAR_Attendance_DB, cursor.getString(1));
-            Attendance_Details.put(DATETIME_DB,cursor.getString(2));
-            Attendance_Details.put(NAME_ATTENDANCE,cursor.getString(3));
-
+            Attendance_Details.put(DATE_DB, cursor.getString(1));
+            Attendance_Details.put(LATITUDE_DB,cursor.getString(2));
+            Attendance_Details.put(LONGITUDE_DB,cursor.getString(3));
+            Attendance_Details.put(TIME_DB,cursor.getString(4));
+            Attendance_Details.put(Flag_Sync_DB,cursor.getString(5));
             list_Attendance_Details.add(Attendance_Details);
         }
         return list_Attendance_Details;
 
-    }*/
+    }
 
 
     // Getting contacts Count

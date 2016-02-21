@@ -1,9 +1,16 @@
 package magnetickush.trackziboo;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -18,10 +25,6 @@ import android.widget.Toast;
 public class ServiceLocation extends Service {
 
 
-    String a = "GPS.txt";
-    File file= new File(Environment.getExternalStorageDirectory()+File.separator);
-    String f = file+"/"+a;
-    // GPSTracker class
     GPSTracker gps;
     double tmplat=0;
     double tmplong=0;
@@ -34,7 +37,7 @@ public class ServiceLocation extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "The new Service was Created", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "The new Service was Created", Toast.LENGTH_LONG).show();
     }
 
 
@@ -49,9 +52,9 @@ public class ServiceLocation extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 
-        time();
+      time();
 
         return START_STICKY;
     }
@@ -74,17 +77,38 @@ public class ServiceLocation extends Service {
                     String lat=String.valueOf(latitude);
                     String lon=String.valueOf(longitude);
 
+                    Calendar calendar = Calendar.getInstance();
+                    Date date = calendar.getTime();
+                    // full name form of the day
+                    System.out.println(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()));
+                     String day = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    String strDate = sdf.format(calendar.getTime());
+
+                    String new_date = null;
+                    DateTime DXT = new DateTime();
+                    try {
+                        new_date = DXT.date_time_day();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String new_date_save = day +","+ new_date;
+
+
+
+
                     try {
 
                         //Save data to Database
 
                         POJO_ZIBO_LOCATION PZJ = new POJO_ZIBO_LOCATION();
-                        PZJ.setDate("");
+                        PZJ.setDate(new_date_save);
                         PZJ.setLatitude(lat);
                         PZJ.setLongitude(lon);
-                        PZJ.setTime("");
+                        PZJ.setTime(strDate);
                         PZJ.setFlagSync("false");
-                        
+
                         DatabaseHandler DH = new DatabaseHandler(ServiceLocation.this);
                         DH.addAttendance(PZJ);
                        /* Log.d("Writting File","Working");
@@ -111,7 +135,7 @@ public class ServiceLocation extends Service {
                 }
 
                 try {
-                    Thread.sleep(20000);
+                    Thread.sleep(2000);
                     time();
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
@@ -119,7 +143,7 @@ public class ServiceLocation extends Service {
                 }
 
             }
-        }, 5000); // 5 sec
+        }, 200000); // 5 sec  180000
 
     }
 
@@ -129,6 +153,9 @@ public class ServiceLocation extends Service {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
 
     }
+
+
+
 
 
 }

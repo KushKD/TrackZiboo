@@ -27,8 +27,6 @@
 
         <service android:name=".ServiceLocation" />
 
-        <activity
-            android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

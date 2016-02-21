@@ -3,6 +3,7 @@ package magnetickush.trackziboo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,18 +14,25 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class UserInformation extends Activity {
 
     EditText name;
-    Button button;
+    TextView showcount;
+    Button button,getcount,b1,b2;
+    Button refresh;
+    ListView LV;
 
     String Name, IMEI , DaywithDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +41,48 @@ public class UserInformation extends Activity {
 
         name= (EditText)findViewById(R.id.name);
         button = (Button)findViewById(R.id.button);
+        getcount = (Button)findViewById(R.id.getcount);
+        showcount = (TextView)findViewById(R.id.showcount);
+        refresh = (Button)findViewById(R.id.refresh);
+        LV = (ListView)findViewById(R.id.showList);
+
+        b1 = (Button)findViewById(R.id.b1);
+        b2 = (Button) findViewById(R.id.b2);
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //GetList
+                showListNew SLN = new showListNew();
+                SLN.execute();
+            }
+        });
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Start The Service
+                startService(new Intent(getBaseContext(), ServiceLocation.class));
+            }
+        });
+
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Stop The Service
+                stopService(new Intent(getBaseContext(), ServiceLocation.class));
+            }
+        });
+
+
+        getcount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getCount GC = new getCount();
+                GC.execute();
+            }
+        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +113,7 @@ public class UserInformation extends Activity {
 
                 getData();
 
-                Intent i = new Intent(UserInformation.this,MainActivity.class);
-                startActivity(i);
+
             }
         });
 
@@ -98,6 +147,70 @@ try {
     Toast.makeText(getApplicationContext(),"Data was not Saved",Toast.LENGTH_LONG).show();
 
 }
+    }
+
+   public  class getCount extends AsyncTask<String ,String,Integer >{
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            DatabaseHandler DH = new DatabaseHandler(UserInformation.this);
+            int count = DH.getContactsCount();
+
+            return count;
+        }
+
+        @Override
+        protected void onPostExecute(Integer  s) {
+            showcount.setText(Integer.toString(s));
+            super.onPostExecute(s);
+        }
+    }
+
+    public class showListNew extends AsyncTask<String,String,String>{
+
+        ArrayList<HashMap<String,String>> listDB_AttendanceDetails = null;
+        BinderData bindingData ;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            DatabaseHandler DH = new DatabaseHandler(UserInformation.this);
+            listDB_AttendanceDetails = new ArrayList<HashMap<String,String>>();
+            listDB_AttendanceDetails = DH.GetAllData_AttendanceStatus();
+            String Message = null;
+
+
+            if(listDB_AttendanceDetails.size()!=0){
+
+
+
+
+               bindingData = new BinderData(UserInformation.this,listDB_AttendanceDetails);
+                Message = "List is not empty" + Integer.toString( listDB_AttendanceDetails.size());
+
+
+
+
+            }else{
+                Message = "List is  empty";
+            }
+
+
+            return Message;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            LV.setAdapter(bindingData);
+            // Toast.makeText(UserInformation.this,s,Toast.LENGTH_LONG).show();
+        }
     }
 
 }
